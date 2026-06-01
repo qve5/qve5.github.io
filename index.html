@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>ABHIS | Digital Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  /* Purple & Silver Theme */
+  --purple: #b44fff;
+  --purple-glow: rgba(180, 79, 255, 0.4);
+  --silver: #e5e7eb;
+  --silver-dim: #9ca3af;
+  --silver-glow: rgba(229, 231, 235, 0.3);
+  --text: rgba(255, 255, 255, 0.9);
+}
+
+html { scroll-behavior:smooth; }
+
+body {
+  min-height: 100vh;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text);
+  overflow-x: hidden;
+  cursor: none;
+  background-color: #06030c;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ── PREMIUM BLURRED BACKGROUND ── */
+.bg-img {
+  position: fixed; inset: -20px; z-index: 0;
+  background-image: url('silver-wolf-level-3840x2160-26448.jpg');
+  background-size: cover;
+  background-position: center;
+  filter: blur(30px) brightness(0.45) saturate(1.2);
+}
+
+.bg-overlay {
+  position: fixed; inset: 0; z-index: 1;
+  background: radial-gradient(circle at center, transparent 20%, rgba(5, 2, 10, 0.8) 100%);
+}
+
+/* ── INTERACTIVE CURSOR ── */
+#cur { position:fixed; top:0; left:0; z-index:9999; width:8px; height:8px; border-radius:50%; background:var(--silver); box-shadow:0 0 10px var(--silver), 0 0 22px var(--silver-glow); pointer-events:none; transform:translate(-50%,-50%); transition:width .12s, height .12s; }
+#cur-ring { position:fixed; top:0; left:0; z-index:9998; width:32px; height:32px; border-radius:50%; border:1px solid rgba(255,255,255,0.3); pointer-events:none; transform:translate(-50%,-50%); transition:width .25s, height .25s, border-color .25s; }
+
+/* ── PRELOADER ── */
+#loader { position:fixed; inset:0; z-index:9990; background:#080410; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.6rem; }
+.ld-name { font-family:'Orbitron',sans-serif; font-size:clamp(2rem,7vw,4rem); font-weight:900; letter-spacing:.2em; color:var(--silver); text-shadow:0 0 30px var(--silver-glow); animation:ld-pulse 0.8s ease-in-out infinite; }
+@keyframes ld-pulse { 0%,100%{opacity:.4;} 50%{opacity:1;} }
+.ld-bar-wrap { width:180px; height:1px; background:rgba(255,255,255,0.1); overflow:hidden; }
+.ld-bar { height:100%; background:linear-gradient(90deg, var(--purple), var(--silver)); box-shadow:0 0 12px var(--purple); animation:ld-fill 1.5s ease-out forwards; }
+@keyframes ld-fill { from{width:0} to{width:100%} }
+
+/* ── MAIN INTERFACE CONTAINER ── */
+.hub-container {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: 480px;
+  padding: 4rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* PROFILE CONTAINER */
+.profile-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  animation: fadeUp 0.8s 0.2s both;
+}
+
+.avatar {
+  width: 96px; height: 96px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  padding: 4px;
+  background: rgba(255, 255, 255, 0.02);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  margin-bottom: 1.2rem;
+}
+.avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+
+/* RE-DESIGNED LIVE STATUS CAPSULE */
+.status-capsule {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 30px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.status-dot { width: 7px; height: 7px; border-radius: 50%; background: #747f8d; box-shadow: 0 0 8px #747f8d; transition: all 0.4s ease; }
+.status-text { font-size: 0.62rem; font-weight: 500; letter-spacing: 0.02em; color: rgba(255, 255, 255, 0.75); }
+
+/* ── SMOOTH GLOWING NAME ── */
+.brand-name {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.8rem, 8vw, 4rem);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #ffffff;
+  margin-top: 1rem;
+  margin-bottom: 0.4rem;
+  padding-left: 0.25em; /* Counteract absolute center offset from letter-spacing */
+  user-select: none;
+  cursor: none;
+  animation: fadeUp 0.8s 0.35s both, ambientGlow 4s ease-in-out infinite alternate;
+}
+
+@keyframes ambientGlow {
+  0% { text-shadow: 0 0 12px rgba(255, 255, 255, 0.35), 0 0 20px rgba(180, 79, 255, 0.15); }
+  100% { text-shadow: 0 0 22px rgba(255, 255, 255, 0.65), 0 0 35px rgba(180, 79, 255, 0.45); }
+}
+
+.brand-subtitle {
+  font-size: 0.58rem;
+  letter-spacing: 0.22em;
+  color: var(--silver-dim);
+  text-transform: uppercase;
+  margin-bottom: 2.5rem;
+  animation: fadeUp 0.8s 0.5s both;
+}
+
+/* ── PILL STYLE LINKS LIST ── */
+.links-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  width: 100%;
+  animation: fadeUp 0.8s 0.65s both;
+}
+
+.hub-btn {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 1rem 1.6rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 100px; /* Perfect sleek capsule design */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  cursor: none;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.hub-btn:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(180, 79, 255, 0.35);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), 0 0 15px rgba(180, 79, 255, 0.15);
+  transform: translateY(-2px);
+  color: #ffffff;
+}
+
+.btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  color: rgba(255, 255, 255, 0.6);
+  transition: color 0.3s ease;
+}
+.hub-btn:hover .btn-icon { color: var(--purple); }
+.btn-icon svg { width: 16px; height: 16px; fill: currentColor; }
+.btn-icon svg[stroke] { fill: none; }
+
+.btn-label { flex: 1; text-align: left; }
+
+.btn-arrow {
+  font-size: 0.85rem;
+  opacity: 0.3;
+  transition: all 0.3s ease;
+  color: #ffffff;
+}
+.hub-btn:hover .btn-arrow { opacity: 0.9; transform: translate(2px, -2px); color: var(--purple); }
+
+/* Unified Special Server Card Row */
+.server-card {
+  border: 1px solid rgba(180, 79, 255, 0.25);
+  background: linear-gradient(90deg, rgba(180, 79, 255, 0.03), rgba(255, 255, 255, 0.02));
+}
+.server-online-text { font-size: 0.6rem; color: var(--silver-dim); margin-left: 0.5rem; }
+
+/* ── MINIMALIST CENTERED FOOTER ── */
+footer {
+  margin-top: 4rem;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.35);
+  text-transform: uppercase;
+  animation: fadeUp 0.8s 0.8s both;
+}
+
+/* ── ANIMATION BASE ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-ring"></div>
+<div class="bg-img"></div>
+<div class="bg-overlay"></div>
+
+<div id="loader">
+  <div class="ld-name">ABHIS</div>
+  <div class="ld-bar-wrap"><div class="ld-bar"></div></div>
+</div>
+
+<div class="hub-container">
+  
+  <div class="profile-wrap">
+    <div class="avatar">
+      <img src="https://imgur.com/kc7Qe36.jpg" alt="Avatar">
+    </div>
+    <div class="status-capsule">
+      <div class="status-dot" id="discord-dot"></div>
+      <span class="status-text" id="discord-status-text">Connecting...</span>
+    </div>
+  </div>
+
+  <h1 class="brand-name">ABHIS</h1>
+  <div class="brand-subtitle">Student • Creator • AI Enthusiast</div>
+
+  <div class="links-list">
+    <a href="https://abhis-portfolio-lake.vercel.app/" target="_blank" class="hub-btn">
+      <div class="btn-icon">
+        <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+      </div>
+      <div class="btn-label">Portfolio</div>
+      <div class="btn-arrow">↗</div>
+    </a>
+
+    <a href="https://abhis-desk-site.vercel.app/" target="_blank" class="hub-btn">
+      <div class="btn-icon">
+        <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+      </div>
+      <div class="btn-label">Digital Desk</div>
+      <div class="btn-arrow">↗</div>
+    </a>
+
+    <a href="https://github.com/abhinavjha928-source" target="_blank" class="hub-btn">
+      <div class="btn-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+      </div>
+      <div class="btn-label">GitHub</div>
+      <div class="btn-arrow">↗</div>
+    </a>
+
+    <a href="https://discord.com/users/723681043336658966" target="_blank" class="hub-btn">
+      <div class="btn-icon">
+        <svg viewBox="0 0 127.14 96.36"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.31,60,73.31,53s5-12.74,11.43-12.74S96.1,46,96,53,91,65.69,84.69,65.69Z"/></svg>
+      </div>
+      <div class="btn-label">Discord</div>
+      <div class="btn-arrow">↗</div>
+    </a>
+
+    <a href="mailto:abhinavjha928@gmail.com" class="hub-btn">
+      <div class="btn-icon">
+        <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+      </div>
+      <div class="btn-label">Contact</div>
+      <div class="btn-arrow">↗</div>
+    </a>
+
+    <a href="https://guns.lol/qve5" target="_blank" class="hub-btn">
+      <div class="btn-icon">
+        <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+      </div>
+      <div class="btn-label">Guns.lol</div>
+      <div class="btn-arrow">↗</div>
+    </a>
+
+    <a href="https://tri-forge.github.io/" target="_blank" class="hub-btn server-card">
+      <div class="btn-icon">
+        <svg viewBox="0 0 127.14 96.36"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.31,60,73.31,53s5-12.74,11.43-12.74S96.1,46,96,53,91,65.69,84.69,65.69Z"/></svg>
+      </div>
+      <div class="btn-label">TriForge <span class="server-online-text" id="server-members">· Syncing...</span></div>
+      <div class="btn-arrow">↗</div>
+    </a>
+  </div>
+
+  <footer>
+    <span id="year">2026</span> • Abhis
+  </footer>
+
+</div>
+
+<script>
+  // 1. Dynamic Footer Year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // 2. Fluid Dual-Trailing Cursor
+  const cur = document.getElementById('cur');
+  const ring = document.getElementById('cur-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+  
+  function animCursor() {
+    rx += (mx - rx) * 0.18; ry += (my - ry) * 0.18;
+    cur.style.left = mx + 'px'; cur.style.top = my + 'px';
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(animCursor);
+  }
+  animCursor();
+
+  document.querySelectorAll('a').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cur.style.width = '4px'; cur.style.height = '4px';
+      ring.style.width = '48px'; ring.style.height = '48px';
+      ring.style.borderColor = 'var(--purple)';
+      ring.style.backgroundColor = 'rgba(180, 79, 255, 0.05)';
+    });
+    el.addEventListener('mouseleave', () => {
+      cur.style.width = '8px'; cur.style.height = '8px';
+      ring.style.width = '32px'; ring.style.height = '32px';
+      ring.style.borderColor = 'rgba(255,255,255,0.3)';
+      ring.style.backgroundColor = 'transparent';
+    });
+  });
+
+  // 3. Remove Loader Screen smoothly
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      const loader = document.getElementById('loader');
+      loader.style.transition = 'opacity 0.5s ease';
+      loader.style.opacity = '0';
+      setTimeout(() => loader.style.display = 'none', 500);
+    }, 1200);
+  });
+
+  // 4. Live User Discord Status Pill integration (Lanyard API)
+  const lanyardAPI = 'https://api.lanyard.rest/v1/users/723681043336658966';
+  const statusDot = document.getElementById('discord-dot');
+  const statusText = document.getElementById('discord-status-text');
+
+  async function fetchUserStatus() {
+    try {
+      const res = await fetch(lanyardAPI);
+      const json = await res.json();
+      if (json.success) {
+        const d = json.data;
+        
+        let color = '#747f8d'; // Default Offline color
+        if (d.discord_status === 'online') color = '#23a559';
+        else if (d.discord_status === 'idle') color = '#f0b232';
+        else if (d.discord_status === 'dnd') color = '#f23f43';
+        
+        statusDot.style.backgroundColor = color;
+        statusDot.style.boxShadow = `0 0 10px ${color}`;
+
+        let currentStatus = 'Currently Offline';
+        if (d.discord_status !== 'offline') currentStatus = 'Currently Online';
+
+        if (d.activities && d.activities.length > 0) {
+          const customStatus = d.activities.find(a => a.type === 4);
+          const playingGame = d.activities.find(a => a.type === 0);
+          const listeningSpotify = d.spotify;
+
+          if (customStatus && customStatus.state) {
+            currentStatus = customStatus.state;
+          } else if (playingGame) {
+            currentStatus = `Playing ${playingGame.name}`;
+          } else if (listeningSpotify) {
+            currentStatus = `Listening to Spotify`;
+          }
+        }
+        statusText.textContent = currentStatus;
+      }
+    } catch (err) {
+      statusText.textContent = 'Status Signal Offline';
+    }
+  }
+
+  // 5. Discord Widget Server Members Sync
+  const guildAPI = 'https://discord.com/api/guilds/1503255333869715517/widget.json';
+  const serverText = document.getElementById('server-members');
+
+  async function fetchServerStatus() {
+    try {
+      const res = await fetch(guildAPI);
+      if (!res.ok) throw new Error("Unavailable");
+      const json = await res.json();
+      
+      if (json.presence_count !== undefined) {
+        serverText.textContent = `· ${json.presence_count} Online`;
+      } else {
+        serverText.textContent = '· Join';
+      }
+    } catch (err) {
+      serverText.textContent = '';
+    }
+  }
+
+  fetchUserStatus();
+  fetchServerStatus();
+  setInterval(fetchUserStatus, 15000);
+  setInterval(fetchServerStatus, 30000);
+</script>
+</body>
+</html>
