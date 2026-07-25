@@ -1,427 +1,1378 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="crimson">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>ABHIS | Digital Hub</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=JetBrains+Mono:wght@300;400;500;700&display=swap" rel="stylesheet"/>
-<style>
-*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABHIS | Fallen Angel</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=JetBrains+Mono:wght@100;300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           CORE SYSTEM & THEMES
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+        :root {
+            /* Crimson Fallen Angel (Default) */
+            --bg-color: #050505;
+            --text-main: #F7F7F7;
+            --text-muted: #D9D9D9;
+            --primary: #580010;
+            --accent: #8B0000;
+            --deep: #2A0910;
+            --glass-bg: rgba(255, 255, 255, 0.02);
+            --glass-border: rgba(255, 255, 255, 0.05);
+            --glow: rgba(88, 0, 16, 0.4);
+            --cursor-color: #D9D9D9;
+            --selection-bg: #8B0000;
+            --selection-text: #F7F7F7;
+        }
 
-:root {
-  /* Purple & Silver Theme */
-  --purple: #b44fff;
-  --purple-glow: rgba(180, 79, 255, 0.4);
-  --silver: #e5e7eb;
-  --silver-dim: #9ca3af;
-  --silver-glow: rgba(229, 231, 235, 0.3);
-  --text: rgba(255, 255, 255, 0.9);
-}
+        [data-theme="silver"] {
+            --bg-color: #020202;
+            --text-main: #FFFFFF;
+            --text-muted: #A0A0A0;
+            --primary: #D9D9D9;
+            --accent: #FFFFFF;
+            --deep: #1A1A1A;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glow: rgba(217, 217, 217, 0.15);
+            --cursor-color: #FFFFFF;
+            --selection-bg: #D9D9D9;
+            --selection-text: #000000;
+        }
 
-html { scroll-behavior:smooth; }
+        [data-theme="white"] {
+            --bg-color: #F7F7F7;
+            --text-main: #050505;
+            --text-muted: #555555;
+            --primary: #000000;
+            --accent: #2A0910;
+            --deep: #E0E0E0;
+            --glass-bg: rgba(0, 0, 0, 0.03);
+            --glass-border: rgba(0, 0, 0, 0.08);
+            --glow: rgba(0, 0, 0, 0.1);
+            --cursor-color: #050505;
+            --selection-bg: #050505;
+            --selection-text: #F7F7F7;
+        }
 
-body {
-  min-height: 100vh;
-  font-family: 'JetBrains Mono', monospace;
-  color: var(--text);
-  overflow-x: hidden;
-  cursor: none;
-  background-color: #06030c;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
+        [data-theme="midnight"] {
+            --bg-color: #0A0204;
+            --text-main: #FFE5E5;
+            --text-muted: #B38A8A;
+            --primary: #8B0000;
+            --accent: #FF1A1A;
+            --deep: #3D0000;
+            --glass-bg: rgba(139, 0, 0, 0.04);
+            --glass-border: rgba(139, 0, 0, 0.15);
+            --glow: rgba(139, 0, 0, 0.3);
+            --cursor-color: #FF1A1A;
+            --selection-bg: #8B0000;
+            --selection-text: #FFFFFF;
+        }
 
-/* ── PREMIUM BLURRED BACKGROUND ── */
-.bg-img {
-  position: fixed; inset: -20px; z-index: 0;
-  background-image: url('silver-wolf-level-3840x2160-26448.jpg');
-  background-size: cover;
-  background-position: center;
-  filter: blur(30px) brightness(0.45) saturate(1.2);
-}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none !important; /* Custom cursor enforced */
+        }
 
-.bg-overlay {
-  position: fixed; inset: 0; z-index: 1;
-  background: radial-gradient(circle at center, transparent 20%, rgba(5, 2, 10, 0.8) 100%);
-}
+        ::selection {
+            background: var(--selection-bg);
+            color: var(--selection-text);
+        }
 
-/* ── INTERACTIVE CURSOR ── */
-#cur { position:fixed; top:0; left:0; z-index:9999; width:8px; height:8px; border-radius:50%; background:var(--silver); box-shadow:0 0 10px var(--silver), 0 0 22px var(--silver-glow); pointer-events:none; transform:translate(-50%,-50%); transition:width .12s, height .12s; }
-#cur-ring { position:fixed; top:0; left:0; z-index:9998; width:32px; height:32px; border-radius:50%; border:1px solid rgba(255,255,255,0.3); pointer-events:none; transform:translate(-50%,-50%); transition:width .25s, height .25s, border-color .25s; }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
 
-/* ── PRELOADER ── */
-#loader { position:fixed; inset:0; z-index:9990; background:#080410; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.6rem; }
-.ld-name { font-family:'Orbitron',sans-serif; font-size:clamp(2rem,7vw,4rem); font-weight:900; letter-spacing:.2em; color:var(--silver); text-shadow:0 0 30px var(--silver-glow); animation:ld-pulse 0.8s ease-in-out infinite; }
-@keyframes ld-pulse { 0%,100%{opacity:.4;} 50%{opacity:1;} }
-.ld-bar-wrap { width:180px; height:1px; background:rgba(255,255,255,0.1); overflow:hidden; }
-.ld-bar { height:100%; background:linear-gradient(90deg, var(--purple), var(--silver)); box-shadow:0 0 12px var(--purple); animation:ld-fill 1.5s ease-out forwards; }
-@keyframes ld-fill { from{width:0} to{width:100%} }
+        html {
+            scroll-behavior: smooth;
+        }
 
-/* ── MAIN INTERFACE CONTAINER ── */
-.hub-container {
-  position: relative;
-  z-index: 3;
-  width: 100%;
-  max-width: 480px;
-  padding: 4rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'JetBrains Mono', monospace;
+            overflow-x: hidden;
+            transition: background-color 0.8s ease, color 0.8s ease;
+        }
 
-/* PROFILE CONTAINER */
-.profile-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  animation: fadeUp 0.8s 0.2s both;
-}
+        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           BACKGROUND & EFFECTS
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
 
-.avatar {
-  width: 96px; height: 96px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(255, 255, 255, 0.25);
-  padding: 4px;
-  background: rgba(255, 255, 255, 0.02);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-  margin-bottom: 1.2rem;
-}
-.avatar img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+        .noise-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            opacity: 0.04;
+            pointer-events: none;
+            background: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+        }
 
-/* RE-DESIGNED LIVE STATUS CAPSULE */
-.status-capsule {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 16px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 30px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-.status-dot { width: 7px; height: 7px; border-radius: 50%; background: #747f8d; box-shadow: 0 0 8px #747f8d; transition: all 0.4s ease; }
-.status-text { font-size: 0.62rem; font-weight: 500; letter-spacing: 0.02em; color: rgba(255, 255, 255, 0.75); }
+        .vignette {
+            position: fixed;
+            inset: 0;
+            z-index: 2;
+            pointer-events: none;
+            background: radial-gradient(circle at center, transparent 30%, var(--bg-color) 120%);
+            transition: background 0.8s ease;
+        }
 
-/* ── SMOOTH GLOWING NAME ── */
-.brand-name {
-  font-family: 'Orbitron', sans-serif;
-  font-weight: 700;
-  font-size: clamp(2.8rem, 8vw, 4rem);
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: #ffffff;
-  margin-top: 1rem;
-  margin-bottom: 0.4rem;
-  padding-left: 0.25em; /* Counteract absolute center offset from letter-spacing */
-  user-select: none;
-  cursor: none;
-  animation: fadeUp 0.8s 0.35s both, ambientGlow 4s ease-in-out infinite alternate;
-}
+        /* Ambient Background Images - these are transparent cutout angel-art assets,
+           so we let them breathe as art instead of blowing them up edge-to-edge and
+           erasing them with blur/opacity. */
+        .ambient-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background-size: min(50vw, 640px) auto;
+            background-position: center 15%;
+            background-repeat: no-repeat;
+            opacity: 0;
+            filter: blur(6px);
+            transition: opacity 1.8s cubic-bezier(0.25, 1, 0.5, 1), filter 1.8s ease;
+            pointer-events: none;
+            mix-blend-mode: screen;
+        }
+        [data-theme="white"] .ambient-bg {
+            mix-blend-mode: darken;
+        }
+        .ambient-bg.active {
+            opacity: 0.35;
+            filter: blur(2px);
+        }
 
-@keyframes ambientGlow {
-  0% { text-shadow: 0 0 12px rgba(255, 255, 255, 0.35), 0 0 20px rgba(180, 79, 255, 0.15); }
-  100% { text-shadow: 0 0 22px rgba(255, 255, 255, 0.65), 0 0 35px rgba(180, 79, 255, 0.45); }
-}
+        /* Hero angel artwork - real, visible, no longer a dead canvas hack */
+        .hero-angel-art {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -46%);
+            width: min(70vw, 620px);
+            height: auto;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.4;
+            mix-blend-mode: screen;
+            filter: drop-shadow(0 0 60px var(--glow));
+            animation: heroAngelFloat 8s ease-in-out infinite;
+            transition: opacity 1.2s ease;
+        }
+        [data-theme="white"] .hero-angel-art {
+            mix-blend-mode: darken;
+            opacity: 0.25;
+        }
+        @keyframes heroAngelFloat {
+            0%, 100% { transform: translate(-50%, -46%) translateY(0); }
+            50% { transform: translate(-50%, -46%) translateY(-18px); }
+        }
 
-.brand-subtitle {
-  font-size: 0.58rem;
-  letter-spacing: 0.22em;
-  color: var(--silver-dim);
-  text-transform: uppercase;
-  margin-bottom: 2.5rem;
-  animation: fadeUp 0.8s 0.5s both;
-}
+        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           CUSTOM CURSOR
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+        #cursor-dot {
+            position: fixed;
+            top: 0; left: 0;
+            width: 6px; height: 6px;
+            background: var(--cursor-color);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            pointer-events: none;
+            transition: background 0.3s, width 0.3s, height 0.3s;
+        }
+        
+        #cursor-ring {
+            position: fixed;
+            top: 0; left: 0;
+            width: 40px; height: 40px;
+            border: 1px solid var(--cursor-color);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9998;
+            pointer-events: none;
+            transition: width 0.3s, height 0.3s, border-color 0.3s, background 0.3s;
+        }
 
-/* ── PILL STYLE LINKS LIST ── */
-.links-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  width: 100%;
-  animation: fadeUp 0.8s 0.65s both;
-}
+        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           LAYOUT & TYPOGRAPHY
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+        .container {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 4vw;
+            position: relative;
+            z-index: 5;
+        }
 
-.hub-btn {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  padding: 1rem 1.6rem;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.78rem;
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.85);
-  text-decoration: none;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 100px; /* Perfect sleek capsule design */
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  cursor: none;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-}
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            padding: 15vh 0;
+        }
 
-.hub-btn:hover {
-  background: rgba(255, 255, 255, 0.07);
-  border-color: rgba(180, 79, 255, 0.35);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2), 0 0 15px rgba(180, 79, 255, 0.15);
-  transform: translateY(-2px);
-  color: #ffffff;
-}
+        h1, h2, h3, h4 {
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
 
-.btn-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 1rem;
-  color: rgba(255, 255, 255, 0.6);
-  transition: color 0.3s ease;
-}
-.hub-btn:hover .btn-icon { color: var(--purple); }
-.btn-icon svg { width: 16px; height: 16px; fill: currentColor; }
-.btn-icon svg[stroke] { fill: none; }
+        .heading-huge {
+            font-size: clamp(3rem, 10vw, 8rem);
+            line-height: 0.9;
+            letter-spacing: -0.02em;
+            color: var(--text-main);
+        }
 
-.btn-label { flex: 1; text-align: left; }
+        .heading-large {
+            font-size: clamp(2.5rem, 6vw, 5.5rem);
+            line-height: 1.1;
+            letter-spacing: 0.05em;
+            margin-bottom: 2rem;
+        }
 
-.btn-arrow {
-  font-size: 0.85rem;
-  opacity: 0.3;
-  transition: all 0.3s ease;
-  color: #ffffff;
-}
-.hub-btn:hover .btn-arrow { opacity: 0.9; transform: translate(2px, -2px); color: var(--purple); }
+        .text-body {
+            font-size: 0.95rem;
+            line-height: 1.9;
+            color: var(--text-muted);
+            font-weight: 300;
+        }
 
-/* Unified Special Server Card Row */
-.server-card {
-  border: 1px solid rgba(180, 79, 255, 0.25);
-  background: linear-gradient(90deg, rgba(180, 79, 255, 0.03), rgba(255, 255, 255, 0.02));
-}
-.server-online-text { font-size: 0.6rem; color: var(--silver-dim); margin-left: 0.5rem; }
+        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           NAVBAR
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 80px;
+            z-index: 100;
+            transition: background 0.4s ease, border-bottom 0.4s ease;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid transparent;
+        }
 
-/* ── MINIMALIST CENTERED FOOTER ── */
-footer {
-  margin-top: 4rem;
-  font-size: 0.6rem;
-  letter-spacing: 0.15em;
-  color: rgba(255, 255, 255, 0.35);
-  text-transform: uppercase;
-  animation: fadeUp 0.8s 0.8s both;
-}
+        nav.scrolled {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+        [data-theme="white"] nav.scrolled {
+            background: rgba(255, 255, 255, 0.6);
+        }
 
-/* ── ANIMATION BASE ── */
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-</style>
+        .nav-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .nav-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 1.2rem;
+            letter-spacing: 0.2em;
+            color: var(--text-main);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .theme-switcher {
+            display: flex;
+            gap: 10px;
+        }
+
+        .theme-btn {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: none;
+            transition: transform 0.3s;
+        }
+        .theme-btn:hover { transform: scale(1.3); }
+        .theme-btn[data-set="crimson"] { background: #580010; }
+        .theme-btn[data-set="silver"] { background: #D9D9D9; }
+        .theme-btn[data-set="white"] { background: #F7F7F7; border: 1px solid #000; }
+        .theme-btn[data-set="midnight"] { background: #0A0204; border: 1px solid #FF1A1A; }
+
+        .scroll-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 1px;
+            background: var(--primary);
+            width: 0%;
+            box-shadow: 0 0 10px var(--glow);
+        }
+
+        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           HERO SECTION
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+        #hero {
+            align-items: center;
+            text-align: center;
+            overflow: hidden;
+            padding: 10vh 0;
+        }
+
+        .spotlight {
+            position: absolute;
+            top: -10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100vw;
+            height: 80vh;
+            background: radial-gradient(ellipse at top, var(--glow) 0%, transparent 60%);
+            mix-blend-mode: screen;
+            z-index: 1;
+            pointer-events: none;
+        }
+        [data-theme="white"] .spotlight { mix-blend-mode: multiply; }
+
+        .moon {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--accent) 0%, var(--deep) 40%, transparent 70%);
+            opacity: 0.15;
+            filter: blur(30px);
+            z-index: 2;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 15;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 5vh;
+        }
+
+        .profile-container {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            margin-bottom: 2rem;
+            border-radius: 50%;
+            padding: 5px;
+            background: linear-gradient(135deg, var(--glass-border), transparent);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 0 20px var(--glow);
+        }
+
+        .profile-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            filter: grayscale(20%) contrast(1.1);
+        }
+
+        .discord-status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 20px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            margin: 1.5rem 0;
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #747f8d;
+            box-shadow: 0 0 10px #747f8d;
+        }
+        .status-text {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+        }
+
+        .hero-intro {
+            font-size: 0.9rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-top: 1rem;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 5vh;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            opacity: 0.5;
+            z-index: 20;
+        }
+        .scroll-line {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--text-main), transparent);
+            animation: scrollLine 2s infinite;
+        }
+        @keyframes scrollLine {
+            0% { transform: scaleY(0); transform-origin: top; }
+            50% { transform: scaleY(1); transform-origin: top; }
+            50.1% { transform: scaleY(1); transform-origin: bottom; }
+            100% { transform: scaleY(0); transform-origin: bottom; }
+        }
+
+        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           ABOUT SECTION (Fixed Ratios)
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+        .split-layout {
+            display: grid;
+            grid-template-columns: 0.8fr 1.2fr; /* Optimized text-to-image ratio */
+            gap: 6vw;
+            align-items: center;
+        }
+
+        .about-image-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4/5; /* Fixed portrait ratio for the angel */
+            height: auto;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 20px 20px 60px rgba(0,0,0,0.5);
+        }
+
+        .about-image {
+            position: absolute;
+            inset: 0;
+            background: url('aboutme.png') center/cover no-repeat;
+            filter: grayscale(20%) contrast(1.1);
+            opacity: 0.9;
+        }
+
+        .about-text {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .about-text p {
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           PROJECTS SECTION (Fixed Overlay and Ratios)
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+        .project-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25vh; /* Increased spacing for breathing room */
+            position: relative;
+            justify-content: center;
+        }
+
+        .project-image-container {
+            width: 65%; /* Exact width ratio */
+            aspect-ratio: 47/25; /* Matches your real screenshot ratio (~1.88:1) - no more edge cropping */
+            height: auto;
+            position: relative;
+            overflow: hidden;
+            border-radius: 6px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+            flex-shrink: 0;
+        }
+
+        .project-image-container::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to right, var(--bg-color), transparent);
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        .project-item:nth-child(even) .project-image-container::after {
+            background: linear-gradient(to left, var(--bg-color), transparent);
+        }
+
+        .project-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: top center; /* keeps nav/logo/header intact instead of cutting it off */
+            filter: grayscale(30%) brightness(0.8);
+            transition: filter 0.5s ease, transform 0.5s ease;
+        }
+
+        .project-item:hover .project-img {
+            filter: grayscale(0%) brightness(1);
+            transform: scale(1.05);
+        }
+
+        .project-info {
+            width: 45%; /* Distinct exact width */
+            margin-left: -10%; /* Controlled, fixed overlap */
+            position: relative;
+            z-index: 10;
+            background: var(--glass-bg);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            padding: 3.5rem;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+            border-radius: 6px;
+        }
+        
+        .project-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+        
+        .project-item:nth-child(even) .project-info {
+            margin-left: 0;
+            margin-right: -10%;
+        }
+
+        .project-title {
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+            letter-spacing: 0.05em;
+        }
+
+        .btn-luxury {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 2rem;
+            padding: 1rem 2rem;
+            background: transparent;
+            border: 1px solid var(--text-muted);
+            color: var(--text-main);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .btn-luxury::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--text-main);
+            transform: translateX(-101%);
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            z-index: -1;
+        }
+
+        .btn-luxury:hover {
+            color: var(--bg-color);
+            border-color: var(--text-main);
+        }
+
+        .btn-luxury:hover::before {
+            transform: translateX(0);
+        }
+
+        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           PRICING SECTION
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-top: 4rem;
+        }
+
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border);
+            padding: 4rem 3rem;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.4s ease, border-color 0.4s ease;
+        }
+
+        .glass-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .glass-panel:hover {
+            transform: translateY(-10px);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+        .glass-panel:hover::before { opacity: 1; }
+
+        .panel-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+        }
+        
+        .panel-subtitle {
+            color: var(--primary);
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 0.1em;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+
+        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           CONTACT SECTION
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+        #contact {
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .contact-links {
+            display: flex;
+            gap: 2.5rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .contact-link {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .contact-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: var(--primary);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .contact-link:hover {
+            color: var(--text-main);
+        }
+
+        .contact-link:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .contact-figure-art {
+            position: absolute;
+            bottom: 0;
+            right: 5%;
+            width: min(32vw, 380px);
+            height: auto;
+            opacity: 0.55;
+            filter: grayscale(15%) drop-shadow(0 0 40px var(--glow));
+            pointer-events: none;
+            z-index: 1;
+            mix-blend-mode: screen;
+        }
+        [data-theme="white"] .contact-figure-art {
+            mix-blend-mode: darken;
+            opacity: 0.35;
+        }
+        @media (max-width: 900px) {
+            .contact-figure-art { opacity: 0.25; width: 55vw; }
+        }
+
+        .footer-text {
+            margin-top: 15vh;
+            font-size: 0.7rem;
+            letter-spacing: 0.2em;
+            color: rgba(255, 255, 255, 0.2);
+            text-transform: uppercase;
+        }
+        [data-theme="white"] .footer-text { color: rgba(0, 0, 0, 0.3); }
+
+        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           ANIMATIONS
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1s cubic-bezier(0.25, 1, 0.5, 1), transform 1s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 1s cubic-bezier(0.25, 1, 0.5, 1), transform 1s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .reveal-scale.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .reveal-blur {
+            opacity: 0;
+            filter: blur(20px);
+            transition: opacity 1.2s ease, filter 1.2s ease;
+        }
+        .reveal-blur.active {
+            opacity: 1;
+            filter: blur(0);
+        }
+
+        /* Overrides so this specific art piece settles as a soft atmospheric
+           accent rather than full opacity, once its reveal animation finishes */
+        .contact-figure-art.reveal-blur.active {
+            opacity: 0.55;
+            filter: grayscale(15%) drop-shadow(0 0 40px var(--glow));
+        }
+        [data-theme="white"] .contact-figure-art.reveal-blur.active {
+            opacity: 0.35;
+        }
+
+        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           RESPONSIVE
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+        @media (max-width: 900px) {
+            .split-layout, .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            .about-image-wrapper {
+                aspect-ratio: auto;
+                height: 50vh;
+                margin-bottom: 2rem;
+            }
+            .project-item, .project-item:nth-child(even) {
+                flex-direction: column;
+            }
+            .project-image-container {
+                width: 100%;
+                aspect-ratio: 47/25;
+            }
+            .project-info {
+                width: 90%;
+                margin: -10% auto 0 !important;
+                padding: 2.5rem;
+            }
+            .nav-links { display: none; }
+        }
+    </style>
 </head>
 <body>
 
-<div id="cur"></div>
-<div id="cur-ring"></div>
-<div class="bg-img"></div>
-<div class="bg-overlay"></div>
+    <!-- Ambient Backgrounds based on Scroll Position -->
+    <div class="ambient-bg" id="bg-main" style="background-image: url('mainone.png');"></div>
+    <div class="ambient-bg" id="bg-about" style="background-image: url('aboutme.png');"></div>
+    <div class="ambient-bg" id="bg-projects" style="background-image: url('projects.png');"></div>
+    <div class="ambient-bg" id="bg-pricing" style="background-image: url('pricing.png');"></div>
+    <div class="ambient-bg" id="bg-bottom" style="background-image: url('bottom.png');"></div>
 
-<div id="loader">
-  <div class="ld-name">ABHIS</div>
-  <div class="ld-bar-wrap"><div class="ld-bar"></div></div>
-</div>
+    <!-- Global Effects -->
+    <canvas id="particles-js"></canvas>
+    <div class="noise-overlay"></div>
+    <div class="vignette"></div>
 
-<div class="hub-container">
-  
-  <div class="profile-wrap">
-    <div class="avatar">
-      <img src="https://imgur.com/kc7Qe36.jpg" alt="Avatar">
-    </div>
-    <div class="status-capsule">
-      <div class="status-dot" id="discord-dot"></div>
-      <span class="status-text" id="discord-status-text">Connecting...</span>
-    </div>
-  </div>
+    <!-- Custom Cursor -->
+    <div id="cursor-dot"></div>
+    <div id="cursor-ring"></div>
 
-  <h1 class="brand-name">ABHIS</h1>
-  <div class="brand-subtitle">Student • Creator • AI Enthusiast</div>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="container nav-inner">
+            <a href="#" class="nav-logo magnetic">ABHIS</a>
+            <div class="nav-links">
+                <a href="#about" class="magnetic">About</a>
+                <a href="#projects" class="magnetic">Exhibition</a>
+                <a href="#pricing" class="magnetic">Services</a>
+                <a href="#contact" class="magnetic">Connect</a>
+            </div>
+            <div class="theme-switcher magnetic">
+                <button class="theme-btn" data-set="crimson" aria-label="Crimson Theme"></button>
+                <button class="theme-btn" data-set="silver" aria-label="Silver Theme"></button>
+                <button class="theme-btn" data-set="white" aria-label="White Theme"></button>
+                <button class="theme-btn" data-set="midnight" aria-label="Midnight Theme"></button>
+            </div>
+        </div>
+        <div class="scroll-progress" id="scroll-progress"></div>
+    </nav>
 
-  <div class="links-list">
-    <a href="https://abhis-portfolio-lake.vercel.app/" target="_blank" class="hub-btn">
-      <div class="btn-icon">
-        <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
-      </div>
-      <div class="btn-label">Portfolio</div>
-      <div class="btn-arrow">↗</div>
-    </a>
-
-    <a href="https://abhis-desk-site.vercel.app/" target="_blank" class="hub-btn">
-      <div class="btn-icon">
-        <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-      </div>
-      <div class="btn-label">Digital Desk</div>
-      <div class="btn-arrow">↗</div>
-    </a>
-
-    <a href="https://github.com/abhinavjha928-source" target="_blank" class="hub-btn">
-      <div class="btn-icon">
-        <svg viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-      </div>
-      <div class="btn-label">GitHub</div>
-      <div class="btn-arrow">↗</div>
-    </a>
-
-    <a href="https://discord.com/users/723681043336658966" target="_blank" class="hub-btn">
-      <div class="btn-icon">
-        <svg viewBox="0 0 127.14 96.36"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.31,60,73.31,53s5-12.74,11.43-12.74S96.1,46,96,53,91,65.69,84.69,65.69Z"/></svg>
-      </div>
-      <div class="btn-label">Discord</div>
-      <div class="btn-arrow">↗</div>
-    </a>
-
-    <a href="mailto:abhinavjha928@gmail.com" class="hub-btn">
-      <div class="btn-icon">
-        <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-      </div>
-      <div class="btn-label">Contact</div>
-      <div class="btn-arrow">↗</div>
-    </a>
-
-    <a href="https://guns.lol/qve5" target="_blank" class="hub-btn">
-      <div class="btn-icon">
-        <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
-      </div>
-      <div class="btn-label">Guns.lol</div>
-      <div class="btn-arrow">↗</div>
-    </a>
-
-    <a href="https://tri-forge.github.io/" target="_blank" class="hub-btn server-card">
-      <div class="btn-icon">
-        <svg viewBox="0 0 127.14 96.36"><path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.31,60,73.31,53s5-12.74,11.43-12.74S96.1,46,96,53,91,65.69,84.69,65.69Z"/></svg>
-      </div>
-      <div class="btn-label">TriForge <span class="server-online-text" id="server-members">· Syncing...</span></div>
-      <div class="btn-arrow">↗</div>
-    </a>
-  </div>
-
-  <footer>
-    <span id="year">2026</span> • Abhis
-  </footer>
-
-</div>
-
-<script>
-  // 1. Dynamic Footer Year
-  document.getElementById('year').textContent = new Date().getFullYear();
-
-  // 2. Fluid Dual-Trailing Cursor
-  const cur = document.getElementById('cur');
-  const ring = document.getElementById('cur-ring');
-  let mx = 0, my = 0, rx = 0, ry = 0;
-  
-  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-  
-  function animCursor() {
-    rx += (mx - rx) * 0.18; ry += (my - ry) * 0.18;
-    cur.style.left = mx + 'px'; cur.style.top = my + 'px';
-    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
-    requestAnimationFrame(animCursor);
-  }
-  animCursor();
-
-  document.querySelectorAll('a').forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      cur.style.width = '4px'; cur.style.height = '4px';
-      ring.style.width = '48px'; ring.style.height = '48px';
-      ring.style.borderColor = 'var(--purple)';
-      ring.style.backgroundColor = 'rgba(180, 79, 255, 0.05)';
-    });
-    el.addEventListener('mouseleave', () => {
-      cur.style.width = '8px'; cur.style.height = '8px';
-      ring.style.width = '32px'; ring.style.height = '32px';
-      ring.style.borderColor = 'rgba(255,255,255,0.3)';
-      ring.style.backgroundColor = 'transparent';
-    });
-  });
-
-  // 3. Remove Loader Screen smoothly
-  window.addEventListener('load', () => {
-    setTimeout(() => {
-      const loader = document.getElementById('loader');
-      loader.style.transition = 'opacity 0.5s ease';
-      loader.style.opacity = '0';
-      setTimeout(() => loader.style.display = 'none', 500);
-    }, 1200);
-  });
-
-  // 4. Live User Discord Status Pill integration (Lanyard API)
-  const lanyardAPI = 'https://api.lanyard.rest/v1/users/723681043336658966';
-  const statusDot = document.getElementById('discord-dot');
-  const statusText = document.getElementById('discord-status-text');
-
-  async function fetchUserStatus() {
-    try {
-      const res = await fetch(lanyardAPI);
-      const json = await res.json();
-      if (json.success) {
-        const d = json.data;
+    <!-- Main Content -->
+    <main>
         
-        let color = '#747f8d'; // Default Offline color
-        if (d.discord_status === 'online') color = '#23a559';
-        else if (d.discord_status === 'idle') color = '#f0b232';
-        else if (d.discord_status === 'dnd') color = '#f23f43';
-        
-        statusDot.style.backgroundColor = color;
-        statusDot.style.boxShadow = `0 0 10px ${color}`;
+        <!-- HERO SECTION -->
+        <section id="hero" data-bg="bg-main">
+            <div class="spotlight"></div>
+            <div class="moon"></div>
+            
+            <!-- Hero Angel Artwork -->
+            <img src="mainone.png" alt="" class="hero-angel-art" aria-hidden="true">
 
-        let currentStatus = 'Currently Offline';
-        if (d.discord_status !== 'offline') currentStatus = 'Currently Online';
+            <div class="container hero-content">
+                <div class="profile-container reveal-scale">
+                    <img src="https://imgur.com/kc7Qe36.jpg" alt="Abhis" class="profile-img">
+                </div>
+                
+                <h1 class="heading-huge reveal-blur">ABHIS</h1>
+                
+                <div class="discord-status-pill reveal" style="transition-delay: 0.2s;">
+                    <div class="status-dot" id="discord-dot"></div>
+                    <span class="status-text" id="discord-status-text">Connecting to server...</span>
+                </div>
+                
+                <p class="hero-intro reveal" style="transition-delay: 0.4s;">Student • Creator • AI Enthusiast</p>
+            </div>
 
-        if (d.activities && d.activities.length > 0) {
-          const customStatus = d.activities.find(a => a.type === 4);
-          const playingGame = d.activities.find(a => a.type === 0);
-          const listeningSpotify = d.spotify;
+            <div class="scroll-indicator reveal" style="transition-delay: 0.8s;">
+                <span class="text-body" style="font-size: 0.6rem; letter-spacing: 0.2em;">DESCEND</span>
+                <div class="scroll-line"></div>
+            </div>
+        </section>
 
-          if (customStatus && customStatus.state) {
-            currentStatus = customStatus.state;
-          } else if (playingGame) {
-            currentStatus = `Playing ${playingGame.name}`;
-          } else if (listeningSpotify) {
-            currentStatus = `Listening to Spotify`;
-          }
+        <!-- ABOUT SECTION -->
+        <section id="about" data-bg="bg-about">
+            <div class="container split-layout">
+                <div class="about-image-wrapper reveal-scale">
+                    <div class="about-image" id="parallax-img-about"></div>
+                </div>
+                <div class="about-text reveal">
+                    <h2 class="heading-large">Fallen<br>From<br>Grace.</h2>
+                    <p class="text-body">
+                        Hello! I am Abhis. A freelancer who loves turning ideas into cool digital stuff. I've been working in the world for a while now and I've learned how to build, design and improve all sorts of online platforms.
+                    </p>
+                    <p class="text-body">
+                        I can help you create a Discord community with a custom bot or build a server that works just right. I also make thumbnails that grab attention, resumes that look professional, and presentations that impress people and help you stand out.
+                    </p>
+                    <p class="text-body">
+                        In today's fast-paced digital world, you need to do more than just be creative. You need to be precise and efficient too. That's what I bring to the table. I design web profiles and link pages that make a big impact. I also help people work productively by optimizing their PCs and setting up AI-powered workflows.
+                    </p>
+                    <p class="text-body">
+                        What I love most is working with clients to make their ideas a reality. Whether you're just starting out or already growing your brand, I'm here to help you navigate the digital world with ease and style.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECTS SECTION -->
+        <section id="projects" data-bg="bg-projects">
+            <div class="container">
+                <h2 class="heading-large reveal" style="text-align: center; margin-bottom: 10vh;">The Exhibition</h2>
+
+                <!-- PROJECT 1 -->
+                <div class="project-item">
+                    <div class="project-image-container reveal-blur">
+                        <img src="abhis.png" alt="Portfolio" class="project-img parallax-project">
+                    </div>
+                    <div class="project-info reveal">
+                        <h3 class="project-title">Digital Portfolio</h3>
+                        <p class="text-body">A personal digital hub reflecting core aesthetics, dark mode integration, and minimalist luxury.</p>
+                        <a href="https://abhis-portfolio-lake.vercel.app/" target="_blank" class="btn-luxury magnetic">Explore ↗</a>
+                    </div>
+                </div>
+
+                <!-- PROJECT 2 -->
+                <div class="project-item">
+                    <div class="project-image-container reveal-blur">
+                        <img src="desk.png" alt="Digital Desk" class="project-img parallax-project">
+                    </div>
+                    <div class="project-info reveal">
+                        <h3 class="project-title">Digital Desk</h3>
+                        <p class="text-body">A streamlined productivity workspace interface. Organized, efficient, and visually silent.</p>
+                        <a href="https://abhis-desk-site.vercel.app/" target="_blank" class="btn-luxury magnetic">Explore ↗</a>
+                    </div>
+                </div>
+
+                <!-- PROJECT 3 -->
+                <div class="project-item">
+                    <div class="project-image-container reveal-blur">
+                        <img src="sayeed.png" alt="Sayeed Website" class="project-img parallax-project">
+                    </div>
+                    <div class="project-info reveal">
+                        <h3 class="project-title">Sayeed Core</h3>
+                        <p class="text-body">Bespoke personal website focusing on bold typography and fluid transitions.</p>
+                        <a href="https://user99999987.github.io/sayeed-website-2/" target="_blank" class="btn-luxury magnetic">Explore ↗</a>
+                    </div>
+                </div>
+
+                <!-- PROJECT 4 -->
+                <div class="project-item">
+                    <div class="project-image-container reveal-blur">
+                        <img src="khasu.png" alt="Khasu FX" class="project-img parallax-project">
+                    </div>
+                    <div class="project-info reveal">
+                        <h3 class="project-title">Khasu FX</h3>
+                        <p class="text-body">Financial aesthetic platform built for raw performance and high contrast clarity.</p>
+                        <a href="https://khasufx.github.io/" target="_blank" class="btn-luxury magnetic">Explore ↗</a>
+                    </div>
+                </div>
+
+                <!-- PROJECT 5 -->
+                <div class="project-item">
+                    <div class="project-image-container reveal-blur">
+                        <img src="skyrv.png" alt="Skyrv" class="project-img parallax-project">
+                    </div>
+                    <div class="project-info reveal">
+                        <h3 class="project-title">Skyrv Identity</h3>
+                        <p class="text-body">Futuristic brand presence combining glassmorphism and subtle glowing accents.</p>
+                        <a href="https://skyrv.github.io/" target="_blank" class="btn-luxury magnetic">Explore ↗</a>
+                    </div>
+                </div>
+
+                <!-- PROJECT 6 -->
+                <div class="project-item">
+                    <div class="project-image-container reveal-blur">
+                        <img src="triforge.png" alt="Tri-Forge" class="project-img parallax-project">
+                    </div>
+                    <div class="project-info reveal">
+                        <h3 class="project-title">Tri-Forge</h3>
+                        <p class="text-body">A digital collective gateway. Developers, Designers, Creators. Modern community interface.</p>
+                        <a href="https://tri-forge.github.io/" target="_blank" class="btn-luxury magnetic">Explore ↗</a>
+                    </div>
+                </div>
+
+                <!-- PROJECT 7 -->
+                <div class="project-item">
+                    <div class="project-image-container reveal-blur">
+                        <img src="bewafa.png" alt="Bewafa" class="project-img parallax-project">
+                    </div>
+                    <div class="project-info reveal">
+                        <h3 class="project-title">Bewafa</h3>
+                        <p class="text-body">An abstract artistic experiment dealing with human emotion, typography, and space.</p>
+                        <a href="https://www.bewafa.fun/" target="_blank" class="btn-luxury magnetic">Explore ↗</a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- PRICING SECTION -->
+        <section id="pricing" data-bg="bg-pricing">
+            <div class="container">
+                <h2 class="heading-large reveal" style="text-align: center;">Engagements</h2>
+                <div class="pricing-grid">
+                    
+                    <div class="glass-panel reveal-scale">
+                        <div>
+                            <p class="panel-subtitle">COMMUNITY TIER</p>
+                            <h3 class="panel-title">Pay What You Wish</h3>
+                            <p class="text-body">For individuals seeking assistance with Discord setups, simple bots, PC optimization, and essential AI workflows. Join the community to request help.</p>
+                        </div>
+                        <a href="https://discord.com/users/723681043336658966" target="_blank" class="btn-luxury magnetic" style="margin-top: 3rem; align-self: flex-start;">Join Discord ↗</a>
+                    </div>
+
+                    <div class="glass-panel reveal-scale" style="transition-delay: 0.2s;">
+                        <div>
+                            <p class="panel-subtitle">EXCLUSIVE TIER</p>
+                            <h3 class="panel-title">Custom Projects</h3>
+                            <p class="text-body">Full-scale digital development, luxury aesthetic websites, complete community architecture, branding, and long-term scripting/note-making contracts.</p>
+                        </div>
+                        <a href="mailto:abhinavjha928@gmail.com" class="btn-luxury magnetic" style="margin-top: 3rem; align-self: flex-start;">Contact Me ↗</a>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT SECTION -->
+        <section id="contact" data-bg="bg-bottom">
+            <img src="bottom.png" alt="" class="contact-figure-art reveal-blur" aria-hidden="true">
+            <div class="container">
+                <h1 class="heading-huge reveal">ASCEND.</h1>
+                <p class="text-body reveal" style="margin-top: 1rem;">Let's create something immortal.</p>
+                
+                <div class="contact-links reveal" style="transition-delay: 0.2s;">
+                    <a href="https://discord.com/users/723681043336658966" target="_blank" class="contact-link magnetic">Discord</a>
+                    <a href="https://github.com/abhinavjha928-source" target="_blank" class="contact-link magnetic">GitHub</a>
+                    <a href="https://www.instagram.com/vexyhas0bitches" target="_blank" class="contact-link magnetic">Instagram</a>
+                    <a href="mailto:abhinavjha928@gmail.com" class="contact-link magnetic">Email</a>
+                </div>
+
+                <div class="footer-text reveal" style="transition-delay: 0.4s;">
+                    © <span id="year"></span> ABHIS. All pixels intentional.
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+           VANILLA JS ENGINE - 60FPS OPTIMIZED
+        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+        // 1. Current Year
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // 2. Custom Magnetic Cursor
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorRing = document.getElementById('cursor-ring');
+        let mouseX = window.innerWidth / 2;
+        let mouseY = window.innerHeight / 2;
+        let dotX = mouseX; let dotY = mouseY;
+        let ringX = mouseX; let ringY = mouseY;
+        let isHovering = false;
+        let magneticTarget = null;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        document.querySelectorAll('.magnetic').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                isHovering = true;
+                magneticTarget = el;
+                cursorDot.style.background = 'transparent';
+                cursorRing.style.width = '60px';
+                cursorRing.style.height = '60px';
+                cursorRing.style.background = 'var(--glass-bg)';
+                cursorRing.style.borderColor = 'var(--primary)';
+            });
+            el.addEventListener('mouseleave', () => {
+                isHovering = false;
+                magneticTarget = null;
+                cursorDot.style.background = 'var(--cursor-color)';
+                cursorRing.style.width = '40px';
+                cursorRing.style.height = '40px';
+                cursorRing.style.background = 'transparent';
+                cursorRing.style.borderColor = 'var(--cursor-color)';
+                el.style.transform = ''; // reset magnetic pull
+            });
+        });
+
+        function animateCursor() {
+            let targetX = mouseX;
+            let targetY = mouseY;
+
+            // Magnetic Pull Logic
+            if (isHovering && magneticTarget) {
+                const rect = magneticTarget.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                
+                // Pull element slightly towards mouse
+                const pullX = (mouseX - centerX) * 0.2;
+                const pullY = (mouseY - centerY) * 0.2;
+                magneticTarget.style.transform = `translate(${pullX}px, ${pullY}px)`;
+
+                // Snap cursor to element center slightly
+                targetX = centerX + (mouseX - centerX) * 0.1;
+                targetY = centerY + (mouseY - centerY) * 0.1;
+            }
+
+            // Lerp functions
+            dotX += (targetX - dotX) * 0.2;
+            dotY += (targetY - dotY) * 0.2;
+            ringX += (targetX - ringX) * 0.1;
+            ringY += (targetY - ringY) * 0.1;
+
+            cursorDot.style.left = `${dotX}px`;
+            cursorDot.style.top = `${dotY}px`;
+            cursorRing.style.left = `${ringX}px`;
+            cursorRing.style.top = `${ringY}px`;
+
+            requestAnimationFrame(animateCursor);
         }
-        statusText.textContent = currentStatus;
-      }
-    } catch (err) {
-      statusText.textContent = 'Status Signal Offline';
-    }
-  }
+        animateCursor();
 
-  // 5. Discord Widget Server Members Sync
-  const guildAPI = 'https://discord.com/api/guilds/1503255333869715517/widget.json';
-  const serverText = document.getElementById('server-members');
+        // 3. Scroll Progress & Navbar & Background Image Sync
+        const navbar = document.getElementById('navbar');
+        const progressBar = document.getElementById('scroll-progress');
+        const sections = document.querySelectorAll('section');
+        const ambientBgs = document.querySelectorAll('.ambient-bg');
 
-  async function fetchServerStatus() {
-    try {
-      const res = await fetch(guildAPI);
-      if (!res.ok) throw new Error("Unavailable");
-      const json = await res.json();
-      
-      if (json.presence_count !== undefined) {
-        serverText.textContent = `· ${json.presence_count} Online`;
-      } else {
-        serverText.textContent = '· Join';
-      }
-    } catch (err) {
-      serverText.textContent = '';
-    }
-  }
+        window.addEventListener('scroll', () => {
+            // Progress Bar
+            const scrollTop = window.scrollY;
+            const docHeight = document.body.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            progressBar.style.width = `${scrollPercent}%`;
 
-  fetchUserStatus();
-  fetchServerStatus();
-  setInterval(fetchUserStatus, 15000);
-  setInterval(fetchServerStatus, 30000);
-</script>
+            // Navbar Blur
+            if (scrollTop > 50) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
+
+            // Ambient Background Switching based on section in view
+            let currentSection = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= (sectionTop - sectionHeight / 3)) {
+                    currentSection = section.getAttribute('data-bg');
+                }
+            });
+
+            ambientBgs.forEach(bg => {
+                if (bg.id === currentSection) {
+                    bg.classList.add('active');
+                } else {
+                    bg.classList.remove('active');
+                }
+            });
+        }, { passive: true });
+
+        // 4. Parallax Image Effects
+        const parallaxImgAbout = document.getElementById('parallax-img-about');
+        const parallaxProjects = document.querySelectorAll('.parallax-project');
+
+        window.addEventListener('scroll', () => {
+            const scrolled = window.scrollY;
+            
+            // About Image Parallax
+            if(parallaxImgAbout) {
+                const rate = scrolled * 0.15;
+                parallaxImgAbout.style.transform = `translate3d(0, ${rate}px, 0)`;
+            }
+
+            // Projects Image Parallax
+            parallaxProjects.forEach(img => {
+                const rect = img.parentElement.getBoundingClientRect();
+                if(rect.top < window.innerHeight && rect.bottom > 0) {
+                    const yOffset = (rect.top - window.innerHeight/2) * 0.1;
+                    img.style.transform = `scale(1.1) translate3d(0, ${yOffset}px, 0)`;
+                }
+            });
+        }, { passive: true });
+
+        // 5. Intersection Observer for Reveal Animations
+        const revealElements = document.querySelectorAll('.reveal, .reveal-scale, .reveal-blur');
+        
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.15
+        };
+
+        const observer = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    obs.unobserve(entry.target); // Reveal only once for performance
+                }
+            });
+        }, observerOptions);
+
+        revealElements.forEach(el => observer.observe(el));
+
+        // 6. Discord Status API (Lanyard)
+        const lanyardAPI = 'https://api.lanyard.rest/v1/users/723681043336658966';
+        const statusDot = document.getElementById('discord-dot');
+        const statusText = document.getElementById('discord-status-text');
+
+        async function fetchUserStatus() {
+            try {
+                const res = await fetch(lanyardAPI);
+                const json = await res.json();
+                if (json.success) {
+                    const d = json.data;
+                    let color = '#747f8d'; // Offline
+                    if (d.discord_status === 'online') color = '#23a559';
+                    else if (d.discord_status === 'idle') color = '#f0b232';
+                    else if (d.discord_status === 'dnd') color = '#f23f43';
+                    
+                    statusDot.style.backgroundColor = color;
+                    statusDot.style.boxShadow = `0 0 10px ${color}`;
+
+                    let currentStatus = 'Currently Offline';
+                    if (d.discord_status !== 'offline') currentStatus = 'Currently Online';
+
+                    if (d.activities && d.activities.length > 0) {
+                        const customStatus = d.activities.find(a => a.type === 4);
+                        const playingGame = d.activities.find(a => a.type === 0);
+                        const listeningSpotify = d.spotify;
+
+                        if (customStatus && customStatus.state) {
+                            currentStatus = customStatus.state;
+                        } else if (playingGame) {
+                            currentStatus = `Playing ${playingGame.name}`;
+                        } else if (listeningSpotify) {
+                            currentStatus = `Listening to Spotify`;
+                        }
+                    }
+                    statusText.textContent = currentStatus;
+                }
+            } catch (err) {
+                statusText.textContent = 'Status Signal Offline';
+            }
+        }
+        fetchUserStatus();
+        setInterval(fetchUserStatus, 30000); // Check every 30s
+
+        // 7. Theme Switcher System
+        const themeBtns = document.querySelectorAll('.theme-btn');
+        const htmlRoot = document.documentElement;
+
+        themeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const theme = btn.getAttribute('data-set');
+                htmlRoot.setAttribute('data-theme', theme);
+                
+                // Small click feedback
+                btn.style.transform = 'scale(0.9)';
+                setTimeout(() => btn.style.transform = '', 150);
+                
+                // Update particles color based on theme
+                updateParticleColor(theme);
+            });
+        });
+
+        // 8. Minimalist Particles Engine (Vanilla Canvas)
+        const canvas = document.getElementById('particles-js');
+        const ctx = canvas.getContext('2d');
+        let particlesArray = [];
+        let pColor = 'rgba(255,255,255,0.2)'; // Default
+
+        function updateParticleColor(theme) {
+            if(theme === 'white') pColor = 'rgba(0,0,0,0.2)';
+            else if(theme === 'crimson') pColor = 'rgba(139,0,0,0.3)';
+            else if(theme === 'midnight') pColor = 'rgba(255,26,26,0.2)';
+            else pColor = 'rgba(255,255,255,0.2)'; // Silver
+        }
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initParticles();
+        });
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 1.5;
+                this.speedX = Math.random() * 0.4 - 0.2;
+                this.speedY = Math.random() * 0.4 - 0.2;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.y < 0) this.y = canvas.height;
+                if (this.y > canvas.height) this.y = 0;
+            }
+            draw() {
+                ctx.fillStyle = pColor;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particlesArray = [];
+            // Substantially increased the particle count (reduced divisor from 12000 to 4000)
+            let numParticles = (canvas.width * canvas.height) / 4000;
+            for (let i = 0; i < numParticles; i++) {
+                particlesArray.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+                particlesArray[i].draw();
+            }
+            requestAnimationFrame(animateParticles);
+        }
+
+        initParticles();
+        animateParticles();
+
+        // 9. Hero Angel Art - real scroll-tied fade + parallax (replaces the old
+        // frame-sequence code, which pointed at angel0001.png...angel0120.png
+        // files that never existed, so it was silently a no-op)
+        const heroAngelArt = document.querySelector('.hero-angel-art');
+        if (heroAngelArt) {
+            window.addEventListener('scroll', () => {
+                const heroHeight = document.getElementById('hero').offsetHeight;
+                const scrollTop = window.scrollY;
+                const fadeFraction = Math.max(0, 1 - (scrollTop / (heroHeight * 0.8)));
+                heroAngelArt.style.opacity = (0.4 * fadeFraction).toFixed(2);
+                heroAngelArt.style.transform = `translate(-50%, -46%) translateY(${scrollTop * 0.25}px)`;
+            }, { passive: true });
+        }
+
+    </script>
 </body>
 </html>
